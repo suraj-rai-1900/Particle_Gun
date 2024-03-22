@@ -19,6 +19,7 @@ algorithm = 'fitqun'
 scoring = 'f1'
 cut_type = 'linear'
 
+print(f'Save Path: {save_path}')
 print(f'Variables: {variables}')
 print(f'Algorithm: {algorithm}')
 print(f'Scoring: {scoring}')

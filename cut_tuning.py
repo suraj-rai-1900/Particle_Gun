@@ -18,16 +18,11 @@ def tuner_output(path):
     return cut_coeff, metric
 
 
-def optimum_vertical_cut(df, variable1, variable2, algorithm, scoring=None):
-    x = np.arange(0, np.nanmax(df[variable2]), 0.1)
-
-    if algorithm == 'fitqun':
-        vertical_cut_1 = np.array((np.array(df[variable1]).reshape(1, -1) > x.reshape(-1, 1)))
-        vertical_cut_2 = np.array((np.array(df[variable1]).reshape(1, -1) < x.reshape(-1, 1)))
-    else:
-        vertical_cut_1 = np.array((np.array(df[variable1]).reshape(1, -1) > 10 ** x.reshape(-1, 1)))
-        vertical_cut_2 = np.array((np.array(df[variable1]).reshape(1, -1) < 10 ** x.reshape(-1, 1)))
-
+def optimum_vertical_cut(df, variable1, variable2, scoring=None):
+    x = np.arange(0, np.nanmax(df[variable2]), 1)
+    vertical_cut_1 = np.array((np.array(df[variable1]).reshape(1, -1) > x.reshape(-1, 1)))
+    vertical_cut_2 = np.array((np.array(df[variable1]).reshape(1, -1) < x.reshape(-1, 1)))
+    
     vertical_metric_1 = np.array([])
     vertical_metric_2 = np.array([])
     vertical_metric = 0
@@ -57,7 +52,7 @@ def optimum_vertical_cut(df, variable1, variable2, algorithm, scoring=None):
     if vertical_metric_1[max_1] > vertical_metric_2[max_2]:
         return x[max_1], vertical_cut_1[max_1]
     else:
-        return x[max_2], vertical_cut_2[max_2]
+        return [x[max_2]], vertical_cut_2[max_2]
 
 
 def finetune_linear(df, variable1, variable2, guess, algorithm, scoring=None, greater=False):
@@ -370,10 +365,10 @@ class CutTuner:
                 else:
                     linear_cut = (df[self.y[i]] < guess[0] * df[self.X[j]] + guess[1])
 
-                x, self.vertical_cut = optimum_vertical_cut(df, self.y[i], self.X[j], scoring=self.scoring,
-                                                            algorithm=self.cut_algorithm)
+                x, self.vertical_cut = optimum_vertical_cut(df, self.y[i], self.X[j], scoring=self.scoring)
                 if self.scoring is None:
-                    linear_metric = [accuracy_score(df['true_sig'], self.vertical_cut), accuracy_score(df['true_sig'], linear_cut)]
+                    linear_metric = [accuracy_score(df['true_sig'], self.vertical_cut), accuracy_score(df['true_sig'],
+                                                                                                       linear_cut)]
                 elif self.scoring == 'f1':
                     linear_metric = f1(df['true_sig'], [self.vertical_cut, linear_cut])[2]
                 elif self.scoring == 'signal_significance':

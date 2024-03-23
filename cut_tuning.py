@@ -114,17 +114,18 @@ def optimum_cut_linear(df, variable1, variable2, algorithm, scoring=None, greate
                 b_array = np.append(b_array, b)
 
                 metric_value = 0
-                try:
-                    for row in cut.T:
-                        if scoring is None:
-                            metric_value = accuracy_score(df['true_sig'], row)
-                        elif scoring == 'f1':
-                            metric_value = f1(df['true_sig'], row)[2]
-                        elif scoring == 'signal_significance':
-                            metric_value = signal_significance(df['true_sig'], row)
+                for row in cut.T:
+                    if scoring is None:
+                        metric_value = accuracy_score(df['true_sig'], row)
+                    elif scoring == 'f1':
+                        metric_value = f1(df['true_sig'], row)[2]
+                    elif scoring == 'signal_significance':
+                        metric_value = signal_significance(df['true_sig'], row)
+
+                    if np.isnan(metric_value):
+                        metric = np.append(metric, 0)
+                    else:
                         metric = np.append(metric, metric_value)
-                except ValueError:
-                    metric = np.append(metric, 0)  # Assign a value of zero when encountering All-NaN slice
 
             index = np.nanargmax(metric)
             best_a_array = np.append(best_a_array, a_array[index])
@@ -148,17 +149,18 @@ def optimum_cut_linear(df, variable1, variable2, algorithm, scoring=None, greate
                 b_array = np.append(b_array, b)
 
                 metric_value = 0
-                try:
-                    for row in cut.T:
-                        if scoring is None:
-                            metric_value = accuracy_score(df['true_sig'], row)
-                        elif scoring == 'f1':
-                            metric_value = f1(df['true_sig'], row)[2]
-                        elif scoring == 'signal_significance':
-                            metric_value = signal_significance(df['true_sig'], row)
+                for row in cut.T:
+                    if scoring is None:
+                        metric_value = accuracy_score(df['true_sig'], row)
+                    elif scoring == 'f1':
+                        metric_value = f1(df['true_sig'], row)[2]
+                    elif scoring == 'signal_significance':
+                        metric_value = signal_significance(df['true_sig'], row)
+
+                    if np.isnan(metric_value):
+                        metric = np.append(metric, 0)
+                    else:
                         metric = np.append(metric, metric_value)
-                except ValueError:
-                    metric = np.append(metric, 0)  # Assign a value of zero when encountering All-NaN slice
 
             index = np.nanargmax(metric)
             best_a_array = np.append(best_a_array, a_array[index])
@@ -197,17 +199,18 @@ def optimum_cut_quadratic(df, variable1, variable2, algorithm, scoring=None, gre
                     c_array = np.append(c_array, c)
 
                     metric_value = 0
-                    try:
-                        for row in cut.T:
-                            if scoring is None:
-                                metric_value = accuracy_score(df['true_sig'], row)
-                            elif scoring == 'f1':
-                                metric_value = f1(df['true_sig'], row)[2]
-                            elif scoring == 'signal_significance':
-                                metric_value = signal_significance(df['true_sig'], row)
+                    for row in cut.T:
+                        if scoring is None:
+                            metric_value = accuracy_score(df['true_sig'], row)
+                        elif scoring == 'f1':
+                            metric_value = f1(df['true_sig'], row)[2]
+                        elif scoring == 'signal_significance':
+                            metric_value = signal_significance(df['true_sig'], row)
+
+                        if np.isnan(metric_value):
+                            metric = np.append(metric, 0)
+                        else:
                             metric = np.append(metric, metric_value)
-                    except ValueError:
-                        metric = np.append(metric, 0)  # Assign a value of zero when encountering All-NaN slice
 
                 index = np.nanargmax(metric)
                 best_a_array = np.append(best_a_array, a_array[index])
@@ -237,17 +240,18 @@ def optimum_cut_quadratic(df, variable1, variable2, algorithm, scoring=None, gre
                     c_array = np.append(c_array, c)
 
                     metric_value = 0
-                    try:
-                        for row in cut.T:
-                            if scoring is None:
-                                metric_value = accuracy_score(df['true_sig'], row)
-                            elif scoring == 'f1':
-                                metric_value = f1(df['true_sig'], row)[2]
-                            elif scoring == 'signal_significance':
-                                metric_value = signal_significance(df['true_sig'], row)
+                    for row in cut.T:
+                        if scoring is None:
+                            metric_value = accuracy_score(df['true_sig'], row)
+                        elif scoring == 'f1':
+                            metric_value = f1(df['true_sig'], row)[2]
+                        elif scoring == 'signal_significance':
+                            metric_value = signal_significance(df['true_sig'], row)
+
+                        if np.isnan(metric_value):
+                            metric = np.append(metric, 0)
+                        else:
                             metric = np.append(metric, metric_value)
-                    except ValueError:
-                        metric = np.append(metric, 0)  # Assign a value of zero when encountering All-NaN slice
 
                 index = np.nanargmax(metric)
                 best_a_array = np.append(best_a_array, a_array[index])

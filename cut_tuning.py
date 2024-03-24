@@ -514,10 +514,10 @@ class CutTuner:
                                           + self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][1] * self.df[self.X[j]]
                                           + self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][2]))
                 if self.scoring is None:
-                    metric[f'{self.y[i]} Vs {self.X[i]}'] = accuracy_score(self.df['true_sig'], cut)
+                    metric[f'{self.y[i]} Vs {self.X[j]}'] = accuracy_score(self.df['true_sig'], cut)
                 elif self.scoring == 'f1':
-                    metric[f'{self.y[i]} Vs {self.X[i]}'] = f1(self.df['true_sig'], cut)[2]
+                    metric[f'{self.y[i]} Vs {self.X[j]}'] = f1(self.df['true_sig'], cut)[2]
                 elif self.scoring == 'signal_significance':
-                    metric[f'{self.y[i]} Vs {self.X[i]}'] = signal_significance(self.df['true_sig'], cut)
+                    metric[f'{self.y[i]} Vs {self.X[j]}'] = signal_significance(self.df['true_sig'], cut)
 
         return metric

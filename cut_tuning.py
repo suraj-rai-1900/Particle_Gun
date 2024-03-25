@@ -18,41 +18,41 @@ def tuner_output(path):
     return cut_coeff, metric
 
 
-def optimum_vertical_cut(df, variable1, variable2, scoring=None):
-    x = np.arange(0, np.nanmax(df[variable2]), 1)
-    vertical_cut_1 = np.array((np.array(df[variable1]).reshape(1, -1) > x.reshape(-1, 1)))
-    vertical_cut_2 = np.array((np.array(df[variable1]).reshape(1, -1) < x.reshape(-1, 1)))
-
-    vertical_metric_1 = np.array([])
-    vertical_metric_2 = np.array([])
-    vertical_metric = 0
-    for row in vertical_cut_1:
-        if scoring is None:
-            vertical_metric = accuracy_score(df['true_sig'], row)
-        elif scoring == 'f1':
-            vertical_metric = f1(df['true_sig'], row)[2]
-        elif scoring == 'signal_significance':
-            vertical_metric = signal_significance(df['true_sig'], row)
-
-        vertical_metric_1 = np.append(vertical_metric_1, vertical_metric)
-
-    vertical_metric = 0
-    for row in vertical_cut_2:
-        if scoring is None:
-            vertical_metric = accuracy_score(df['true_sig'], row)
-        elif scoring == 'f1':
-            vertical_metric = f1(df['true_sig'], row)[2]
-        elif scoring == 'signal_significance':
-            vertical_metric = signal_significance(df['true_sig'], row)
-
-        vertical_metric_2 = np.append(vertical_metric_2, vertical_metric)
-
-    max_1 = np.nanargmax(vertical_metric_1)
-    max_2 = np.nanargmax(vertical_metric_2)
-    if vertical_metric_1[max_1] > vertical_metric_2[max_2]:
-        return [x[max_1]], vertical_cut_1[max_1]
-    else:
-        return [x[max_2]], vertical_cut_2[max_2]
+# def optimum_vertical_cut(df, variable1, variable2, scoring=None):
+#     x = np.arange(0, np.nanmax(df[variable2]), 1)
+#     vertical_cut_1 = np.array((np.array(df[variable1]).reshape(1, -1) > x.reshape(-1, 1)))
+#     vertical_cut_2 = np.array((np.array(df[variable1]).reshape(1, -1) < x.reshape(-1, 1)))
+#
+#     vertical_metric_1 = np.array([])
+#     vertical_metric_2 = np.array([])
+#     vertical_metric = 0
+#     for row in vertical_cut_1:
+#         if scoring is None:
+#             vertical_metric = accuracy_score(df['true_sig'], row)
+#         elif scoring == 'f1':
+#             vertical_metric = f1(df['true_sig'], row)[2]
+#         elif scoring == 'signal_significance':
+#             vertical_metric = signal_significance(df['true_sig'], row)
+#
+#         vertical_metric_1 = np.append(vertical_metric_1, vertical_metric)
+#
+#     vertical_metric = 0
+#     for row in vertical_cut_2:
+#         if scoring is None:
+#             vertical_metric = accuracy_score(df['true_sig'], row)
+#         elif scoring == 'f1':
+#             vertical_metric = f1(df['true_sig'], row)[2]
+#         elif scoring == 'signal_significance':
+#             vertical_metric = signal_significance(df['true_sig'], row)
+#
+#         vertical_metric_2 = np.append(vertical_metric_2, vertical_metric)
+#
+#     max_1 = np.nanargmax(vertical_metric_1)
+#     max_2 = np.nanargmax(vertical_metric_2)
+#     if vertical_metric_1[max_1] > vertical_metric_2[max_2]:
+#         return [x[max_1]], vertical_cut_1[max_1]
+#     else:
+#         return [x[max_2]], vertical_cut_2[max_2]
 
 
 def finetune_linear(df, variable1, variable2, guess, algorithm, scoring=None, greater=False):
@@ -373,50 +373,50 @@ class CutTuner:
         df = self.df
         for i in range(len(self.y)):
             for j in range(len(self.X)):
-                linear_metric = 0
+                # linear_metric = 0
                 guess = optimum_cut_linear(df, self.y[i], self.X[j], scoring=self.scoring, greater=self.relation[i],
                                            algorithm=self.cut_algorithm)
-                if self.relation[i]:
-                    linear_cut = (df[self.y[i]] > guess[0] * df[self.X[j]] + guess[1])
-                else:
-                    linear_cut = (df[self.y[i]] < guess[0] * df[self.X[j]] + guess[1])
+                # if self.relation[i]:
+                #     linear_cut = (df[self.y[i]] > guess[0] * df[self.X[j]] + guess[1])
+                # else:
+                #     linear_cut = (df[self.y[i]] < guess[0] * df[self.X[j]] + guess[1])
 
-                x, self.vertical_cut = optimum_vertical_cut(df, self.y[i], self.X[j], scoring=self.scoring)
-                if self.scoring is None:
-                    linear_metric = [accuracy_score(df['true_sig'], self.vertical_cut), accuracy_score(df['true_sig'],
-                                                                                                       linear_cut)]
-                elif self.scoring == 'f1':
-                    linear_metric = f1(df['true_sig'], [self.vertical_cut, linear_cut])[2]
-                elif self.scoring == 'signal_significance':
-                    linear_metric = signal_significance(df['true_sig'], [self.vertical_cut, linear_cut])
-
-                if linear_metric[0] < linear_metric[1]:
-                    self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'] = finetune_linear(df, self.y[i], self.X[j],
-                                                                                           guess=guess,
-                                                                                           scoring=self.scoring,
-                                                                                           greater=self.relation[i],
-                                                                                           algorithm=self.cut_algorithm)
-                    if self.cut_algorithm == 'fitqun':
-                        if self.relation[i]:
-                            df = df[
-                                df[self.y[i]] > self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][0] * df[self.X[j]]
-                                + self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][1]]
-                        else:
-                            df = df[
-                                df[self.y[i]] < self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][0] * df[self.X[j]]
-                                + self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][1]]
+                # x, self.vertical_cut = optimum_vertical_cut(df, self.y[i], self.X[j], scoring=self.scoring)
+                # if self.scoring is None:
+                #     linear_metric = [accuracy_score(df['true_sig'], self.vertical_cut), accuracy_score(df['true_sig'],
+                #                                                                                        linear_cut)]
+                # elif self.scoring == 'f1':
+                #     linear_metric = f1(df['true_sig'], [self.vertical_cut, linear_cut])[2]
+                # elif self.scoring == 'signal_significance':
+                #     linear_metric = signal_significance(df['true_sig'], [self.vertical_cut, linear_cut])
+                #
+                # if linear_metric[0] < linear_metric[1]:
+                self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'] = finetune_linear(df, self.y[i], self.X[j],
+                                                                                       guess=guess,
+                                                                                       scoring=self.scoring,
+                                                                                       greater=self.relation[i],
+                                                                                       algorithm=self.cut_algorithm)
+                if self.cut_algorithm == 'fitqun':
+                    if self.relation[i]:
+                        df = df[
+                            df[self.y[i]] > self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][0] * df[self.X[j]]
+                            + self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][1]]
                     else:
-                        if self.relation[i]:
-                            df = df[df[self.y[i]] > 10 ** (
-                                        self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][0] * df[self.X[j]]
-                                        + self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][1])]
-                        else:
-                            df = df[df[self.y[i]] < 10 ** (
-                                        self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][0] * df[self.X[j]]
-                                        + self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][1])]
+                        df = df[
+                            df[self.y[i]] < self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][0] * df[self.X[j]]
+                            + self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][1]]
                 else:
-                    self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'] = x
-                    df = df[self.vertical_cut]
+                    if self.relation[i]:
+                        df = df[df[self.y[i]] > 10 ** (
+                                    self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][0] * df[self.X[j]]
+                                    + self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][1])]
+                    else:
+                        df = df[df[self.y[i]] < 10 ** (
+                                    self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][0] * df[self.X[j]]
+                                    + self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][1])]
+                # else:
+                #     self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'] = x
+                #     df = df[self.vertical_cut]
 
     def optimize_quadratic_cut(self):
         self.cut_coefficients = {}
@@ -461,17 +461,17 @@ class CutTuner:
             for j in range(len(self.X)):
                 if self.cut_algorithm == 'fitqun':
                     if cut_type == 'linear':
-                        if len(self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}']) == 2:
-                            if self.relation[i]:
-                                cut = (self.df[self.y[i]] > self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][0] *
-                                       self.df[self.X[j]] +
-                                       self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][1])
-                            else:
-                                cut = (self.df[self.y[i]] < self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][0] *
-                                       self.df[self.X[j]] +
-                                       self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][1])
+                        # if len(self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}']) == 2:
+                        if self.relation[i]:
+                            cut = (self.df[self.y[i]] > self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][0] *
+                                   self.df[self.X[j]] +
+                                   self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][1])
                         else:
-                            cut = self.vertical_cut
+                            cut = (self.df[self.y[i]] < self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][0] *
+                                   self.df[self.X[j]] +
+                                   self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][1])
+                        # else:
+                        #     cut = self.vertical_cut
                     elif cut_type == 'quadratic':
                         if self.relation[i]:
                             cut = (self.df[self.y[i]] >
@@ -487,19 +487,19 @@ class CutTuner:
                                    + self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][2])
                 else:
                     if cut_type == 'linear':
-                        if len(self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}']) == 2:
-                            if self.relation[i]:
-                                cut = (self.df[self.y[i]] > 10 ** (
-                                            self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][0] *
-                                            self.df[self.X[j]] +
-                                            self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][1]))
-                            else:
-                                cut = (self.df[self.y[i]] < 10 ** (
-                                            self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][0] *
-                                            self.df[self.X[j]] +
-                                            self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][1]))
+                        # if len(self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}']) == 2:
+                        if self.relation[i]:
+                            cut = (self.df[self.y[i]] > 10 ** (
+                                        self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][0] *
+                                        self.df[self.X[j]] +
+                                        self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][1]))
                         else:
-                            cut = self.vertical_cut
+                            cut = (self.df[self.y[i]] < 10 ** (
+                                        self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][0] *
+                                        self.df[self.X[j]] +
+                                        self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][1]))
+                        # else:
+                        #     cut = self.vertical_cut
                     elif cut_type == 'quadratic':
                         if self.relation[i]:
                             cut = (self.df[self.y[i]] >

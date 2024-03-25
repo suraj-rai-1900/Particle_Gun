@@ -68,7 +68,8 @@ def create_true_df(file='/home/pdeperio/machine_learning/data/'
                                                   np.array(h5_file['labels'])[test_idxs].squeeze())
     df['h5_vetos'] = np.array(h5_file['veto'])[test_idxs].squeeze()
     df['h5_nhits'] = h5_nhits
-    df['h5_angles'] = np.array(h5_file['angles'])[test_idxs].squeeze()
+    df['cos_zenith'] = np.cos(np.array(h5_file['angles'])[test_idxs][:, 0])
+    df['azimuth'] = np.array(h5_file['angles'])[test_idxs][:, 1] * 180/np.pi
     return df
 
 
@@ -129,7 +130,7 @@ def relevant_df(true_variables=None, reco_variables=None, softmax_variables=None
                           'pi0_mass']
 
     if true_variables is None:
-        true_variables = ['h5_labels', 'h5_momentum', 'h5_towall', 'h5_dwall', 'h5_angles']
+        true_variables = ['h5_labels', 'h5_momentum', 'h5_towall', 'h5_dwall', 'cos_zenith', 'azimuth']
 
     if not isinstance(true_sig, (list, np.ndarray)):
         true_sig = [true_sig]

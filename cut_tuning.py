@@ -6,8 +6,8 @@ from utils.classification_metrics import f1, signal_significance
 
 
 def tuner_output(path):
-    cut_coeff = np.load(f'{path}coefficients.npy', allow_pickle=True)
-    metric = np.load(f'{path}metric.npy', allow_pickle=True)
+    cut_coeff = np.load(f'{path}coefficients.npy', allow_pickle=True).item()
+    metric = np.load(f'{path}metric.npy', allow_pickle=True).item()
     with open(f'{path}config.txt', 'r') as file:
         line_number = 0
         for line in file:

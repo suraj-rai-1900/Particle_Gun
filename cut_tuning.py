@@ -477,61 +477,56 @@ class CutTuner:
 
     def print_metric(self, cut_type):
         metric = {}
+        df = self.df
         for i in range(len(self.y)):
             for j in range(len(self.X)):
                 if self.cut_algorithm == 'fitqun':
                     if cut_type == 'linear':
                         # if len(self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}']) == 2:
                         if self.relation[i]:
-                            cut = (self.df[self.y[i]] > self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][0] *
-                                   self.df[self.X[j]] +
-                                   self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][1])
+                            cut = (df[self.y[i]] > self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][0] *
+                                   df[self.X[j]] + self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][1])
                         else:
-                            cut = (self.df[self.y[i]] < self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][0] *
-                                   self.df[self.X[j]] +
-                                   self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][1])
+                            cut = (df[self.y[i]] < self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][0] *
+                                   df[self.X[j]] + self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][1])
                         # else:
                         #     cut = self.vertical_cut
                     elif cut_type == 'quadratic':
                         if self.relation[i]:
-                            cut = (self.df[self.y[i]] >
-                                   self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][0] * self.df[self.X[j]] *
-                                   self.df[self.X[j]]
-                                   + self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][1] * self.df[self.X[j]]
+                            cut = (df[self.y[i]] > 
+                                   self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][0] * df[self.X[j]] *
+                                   df[self.X[j]]
+                                   + self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][1] * df[self.X[j]]
                                    + self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][2])
                         else:
-                            cut = (self.df[self.y[i]] <
-                                   self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][0] * self.df[self.X[j]] *
-                                   self.df[self.X[j]]
-                                   + self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][1] * self.df[self.X[j]]
+                            cut = (df[self.y[i]] <
+                                   self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][0] * df[self.X[j]] *
+                                   df[self.X[j]]
+                                   + self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][1] * df[self.X[j]]
                                    + self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][2])
                 else:
                     if cut_type == 'linear':
                         # if len(self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}']) == 2:
                         if self.relation[i]:
-                            cut = (self.df[self.y[i]] > 10 ** (
-                                        self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][0] *
-                                        self.df[self.X[j]] +
-                                        self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][1]))
+                            cut = (df[self.y[i]] > 10 ** (self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][0] *
+                                   df[self.X[j]] + self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][1]))
                         else:
-                            cut = (self.df[self.y[i]] < 10 ** (
-                                        self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][0] *
-                                        self.df[self.X[j]] +
-                                        self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][1]))
+                            cut = (df[self.y[i]] < 10 ** (self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][0] *
+                                   df[self.X[j]] + self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][1]))
                         # else:
                         #     cut = self.vertical_cut
                     elif cut_type == 'quadratic':
                         if self.relation[i]:
-                            cut = (self.df[self.y[i]] >
-                                   10 ** (self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][0] * self.df[self.X[j]] *
-                                          self.df[self.X[j]]
-                                          + self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][1] * self.df[self.X[j]]
+                            cut = (df[self.y[i]] >
+                                   10 ** (self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][0] * df[self.X[j]] *
+                                          df[self.X[j]]
+                                          + self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][1] * df[self.X[j]]
                                           + self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][2]))
                         else:
-                            cut = (self.df[self.y[i]] <
-                                   10 ** (self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][0] * self.df[self.X[j]] *
-                                          self.df[self.X[j]]
-                                          + self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][1] * self.df[self.X[j]]
+                            cut = (df[self.y[i]] <
+                                   10 ** (self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][0] * df[self.X[j]] *
+                                          df[self.X[j]]
+                                          + self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][1] * df[self.X[j]]
                                           + self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][2]))
                 if self.scoring is None:
                     metric[f'{self.y[i]} Vs {self.X[j]}'] = accuracy_score(self.df['true_sig'], cut)
@@ -539,5 +534,7 @@ class CutTuner:
                     metric[f'{self.y[i]} Vs {self.X[j]}'] = f1(self.df['true_sig'], cut)[2]
                 elif self.scoring == 'signal_significance':
                     metric[f'{self.y[i]} Vs {self.X[j]}'] = signal_significance(self.df['true_sig'], cut)
+                    
+                df = df[cut]
 
         return metric

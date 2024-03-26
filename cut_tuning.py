@@ -58,7 +58,11 @@ def tuner_output(path):
 def finetune_linear(df, variable1, variable2, guess, algorithm, scoring=None, greater=False):
     if algorithm == 'fitqun':
         a = np.repeat(np.arange(guess[0] - 0.1, guess[0] + 0.1, 0.01), 20)
+        if a.shape[0] == 420:
+            a = a[:400]
         b = np.tile(np.arange(guess[1] - 10, guess[1] + 10, 1), 20)
+        if b.shape[0] == 420:
+            b = b[:400]
         cut_value = np.dot(np.array(df[variable2]).reshape(-1, 1), a.reshape(1, -1)) + b.reshape(1, -1)
 
         if greater:
@@ -67,7 +71,11 @@ def finetune_linear(df, variable1, variable2, guess, algorithm, scoring=None, gr
             cut = (np.array(df[variable1]).reshape(-1, 1) < cut_value)
     else:
         a = np.repeat(np.arange(guess[0] - 0.01, guess[0] + 0.01, 0.001), 20)
+        if a.shape[0] == 420:
+            a = a[:400]
         b = np.tile(np.arange(guess[1] - 0.1, guess[1] + 0.1, 0.01), 20)
+        if b.shape[0] == 420:
+            b = b[:400]
         cut_value = np.dot(np.array(df[variable2]).reshape(-1, 1), a.reshape(1, -1)) + b.reshape(1, -1)
 
         if greater:
@@ -266,8 +274,14 @@ def optimum_cut_quadratic(df, variable1, variable2, algorithm, scoring=None, gre
 def finetune_quadratic(df, variable1, variable2, guess, algorithm, scoring=None, greater=False):
     if algorithm == 'fitqun':
         a = np.arange(guess[0] - 0.001, guess[0] + 0.001, 0.000005)
+        if a.shape[0] == 420:
+            a = a[:400]
         b = np.repeat(np.arange(guess[1] - 0.1, guess[1] + 0.1, 0.01), 20)
+        if b.shape[0] == 420:
+            b = b[:400]
         c = np.tile(np.arange(guess[2] - 10, guess[2] + 10, 1), 20)
+        if c.shape[0] == 420:
+            c = c[:400]
 
         cut_value = (np.dot(np.array(df[variable2] ** 2).reshape(-1, 1), a.reshape(1, -1)) +
                      np.dot(np.array(df[variable2]).reshape(-1, 1), b.reshape(1, -1))) + c.reshape(1, -1)
@@ -278,8 +292,14 @@ def finetune_quadratic(df, variable1, variable2, guess, algorithm, scoring=None,
             cut = (np.array(df[variable1]).reshape(-1, 1) < cut_value)
     else:
         a = np.arange(guess[0] - 0.0001, guess[0] + 0.0001, 0.0000005)
+        if a.shape[0] == 420:
+            a = a[:400]
         b = np.repeat(np.arange(guess[1] - 0.01, guess[1] + 0.01, 0.001), 20)
+        if b.shape[0] == 420:
+            b = b[:400]
         c = np.tile(np.arange(guess[2] - 0.1, guess[2] + 0.1, 0.01), 20)
+        if c.shape[0] == 420:
+            c = c[:400]
 
         cut_value = (np.dot(np.array(df[variable2] ** 2).reshape(-1, 1), a.reshape(1, -1)) +
                      np.dot(np.array(df[variable2]).reshape(-1, 1), b.reshape(1, -1))) + c.reshape(1, -1)

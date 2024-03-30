@@ -113,8 +113,8 @@ def ml_cuts(df):
             )
         else:
             cuts = np.array(
-                (df['pmu'] < 10 ** (0.0197 * df['reco_electron_mom'] - 0.66))
-                & (df['pe'] > 10 ** (-0.19))
+                # (df['pmu'] < 10 ** (0.0197 * df['reco_electron_mom'] - 0.66))
+                (df['pe'] > 10 ** (-0.19))
             )
         return cuts
 
@@ -127,8 +127,8 @@ def ml_cuts(df):
         else:
             cuts = np.array(
                 (df['pe'] > 10 ** (-0.16))
-                & (df['pe'] > 10 ** (-1.01 * df['pi0_mass'] - 0.13))
-                & (df['ppi0'] < 10 ** (0.1039 * df['reco_electron_mom'] - 0.69))
+                # & (df['pe'] > 10 ** (-1.01 * df['pi0_mass'] - 0.13))
+                # & (df['ppi0'] < 10 ** (0.1039 * df['reco_electron_mom'] - 0.69))
                 & (df['ppi0'] < 10 ** (-0.002 * df['pi0_mass'] - 0.439))
             )
         return cuts
@@ -234,8 +234,8 @@ def softmax_discriminator(df):
             )
         else:
             softmax_dis = np.array(
-                (- df['pmu'] + 10 ** (0.0179 * df['reco_electron_mom'] - 0.66))
-                + (df['pe'] - 10 ** (-0.19))
+                # (- df['pmu'] + 10 ** (0.0179 * df['reco_electron_mom'] - 0.66))
+                (df['pe'] - 10 ** (-0.19))
             )
         return softmax_dis
 
@@ -248,8 +248,8 @@ def softmax_discriminator(df):
         else:
             softmax_dis = np.array(
                 (df['pe'] - 10 ** (-0.16))
-                + (df['pe'] - 10 ** (-1.01 * df['pi0_mass'] - 0.13))
-                + (- df['ppi0'] + 10 ** (0.1039 * df['reco_electron_mom'] - 0.69))
+                # + (df['pe'] - 10 ** (-1.01 * df['pi0_mass'] - 0.13))
+                # + (- df['ppi0'] + 10 ** (0.1039 * df['reco_electron_mom'] - 0.69))
                 + (- df['ppi0'] + 10 ** (-0.002 * df['pi0_mass'] - 0.439))
             )
         return softmax_dis

@@ -11,10 +11,18 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.calibration import calibration_curve
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 import os
 from PIL import Image
 from utils.classification_metrics import f1, signal_significance
 from utils.plot import class_frac, sig_frac, sg_bg_hist, roc
+
+font = {'family': 'DejaVu Sans',
+        'weight': 'normal',
+        'size': 28}
+mpl.rc('font', **font)
+mpl.rcParams['figure.figsize'] = (12, 9)
+mpl.rcParams["figure.autolayout"] = True
 
 
 def run_output(path, grid_search=False):

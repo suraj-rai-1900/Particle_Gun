@@ -17,13 +17,6 @@ from PIL import Image
 from utils.classification_metrics import f1, signal_significance
 from utils.plot import class_frac, sig_frac, sg_bg_hist, roc
 
-font = {'family': 'DejaVu Sans',
-        'weight': 'normal',
-        'size': 28}
-mpl.rc('font', **font)
-mpl.rcParams['figure.figsize'] = (12, 9)
-mpl.rcParams["figure.autolayout"] = True
-
 
 def run_output(path, grid_search=False):
     output = ModelOutput(path, grid_search)

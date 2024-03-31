@@ -6,13 +6,6 @@ from sklearn import metrics
 from watchmal_dependencies import binning as bins
 from utils.classification_metrics import calculate_tpr_fpr
 
-font = {'family': 'DejaVu Sans',
-        'weight': 'normal',
-        'size': 28}
-mpl.rc('font', **font)
-mpl.rcParams['figure.figsize'] = (12, 9)
-mpl.rcParams["figure.autolayout"] = True
-
 
 def sig_frac(df):
 

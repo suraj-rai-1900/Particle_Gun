@@ -34,8 +34,8 @@ def run_model(df, train_col, model_name='gbdt', grid_search=False, scoring='f1')
     class_frac(df)
     sig_frac(df)
 
-    plt.hist(model.y_train, label='train_sig', histtype='step')
-    plt.hist(model.y_test, label='test_sig', histtype='step')
+    plt.hist(model.y_train, bins=100, label='train_sig', histtype='step')
+    plt.hist(model.y_test, bins=100, label='test_sig', histtype='step')
     plt.xlabel('Signal/background label')
     plt.ylabel('Count')
     plt.title('Signal/background counts used for testing and training')
@@ -309,16 +309,16 @@ class CutEngine:
 
     def plot_probs(self, y_log=True, save_path=None):
         plt.hist([self.train_prob[self.y_train == i] for i in range(2)], histtype="step", bins=50, range=(0, 1),
-                 label=["train_Background", "train_Signal"])
+                 label=["train_Bg", "train_Sg"])
         plt.hist([self.test_prob[self.y_test == i] for i in range(2)], histtype="step", bins=50, range=(0, 1),
-                 label=["test_Background", "test_Signal"])
-        plt.axvline(x=float(self.best_thresh), color='black', linestyle='--', label='Selected Threshold')
+                 label=["test_Bg", "test_Sg"])
+        plt.axvline(x=float(self.best_thresh), color='black', linestyle='--', label='Threshold')
         plt.title(f'Probability Distribution for test and train events')
         plt.xlabel("Computed probability")
         plt.ylabel("Number of events")
         if y_log:
             plt.yscale('log')
-        plt.legend()
+        plt.legend(loc='upper right', bbox_to_anchor=(0.8, 0.2))
         if save_path is not None:
             path = os.path.join(save_path, 'images')
             if not os.path.exists(path):

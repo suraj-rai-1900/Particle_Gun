@@ -318,7 +318,7 @@ class CutEngine:
         plt.ylabel("Number of events")
         if y_log:
             plt.yscale('log')
-        plt.legend(loc='upper right', bbox_to_anchor=(0.8, 0.2))
+        plt.legend(loc='upper right', bbox_to_anchor=(0.8, 0.4))
         if save_path is not None:
             path = os.path.join(save_path, 'images')
             if not os.path.exists(path):

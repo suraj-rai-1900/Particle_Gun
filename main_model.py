@@ -4,9 +4,10 @@ from utils.plot import roc
 import numpy as np
 import os
 
-df = create_file.relevant_df(apply_presel=False, select_labels=[1, 2])
+# df = create_file.relevant_df(apply_presel=False, select_labels=[1, 2])
+df = create_file.read_folder(select_labels=[1, 2])
 
-save_path = '/home/surajrai1900/outputs/output1/'
+save_path = '/home/surajrai1900/neut/outputs/gbdt/fq_emu'
 if not os.path.exists(save_path):
     os.makedirs(save_path)
 
@@ -17,7 +18,7 @@ if not os.path.exists(save_path):
 
 # Scoring : f1, signal_significance, None
 
-train_col = ['e_likelihood', 'mu_likelihood', 'reco_electron_mom', 'reco_electron_towall', 'reco_electron_dwall', 'true_sig']
+train_col = ['elikelihood', 'mulikelihood', 'mom', 'towall', 'dwall', 'sig']
 train_labels = [1, 2]
 grid_search = False
 model_name = 'gbdt'
@@ -96,3 +97,5 @@ fig_rejection, _ = roc(df['true_sig'], model.y_prob, mode='rejection', algorithm
 fig_rejection.savefig(os.path.join(save_path, 'images', 'rejection_roc_plot.png'))
 fig_efficiency, _ = roc(df['true_sig'], model.y_prob, mode='efficiency', algorithms=model_name, cut=model.cut)
 fig_efficiency.savefig(os.path.join(save_path, 'images', 'efficiency_roc_plot.png'))
+
+

@@ -199,7 +199,7 @@ def read_folder(select_labels, fpath="/home/surajrai1900/analysis_data/"):
     df = pd.concat(df_list)
 
     df['true_sig'] = df['sig']
-    df['e/mu_likelihood ratio'] = df['mulikelihood'] - df['elilkelihood']
+    df['e/mu_likelihood ratio'] = df['mulikelihood'] - df['elikelihood']
     df['pi0/e_likelihood ratio'] = df['elikelihood'] - df['pi0likelihood']
 
     df.drop(columns=['sig_fitqun', 'pi0fitqun', 'weight', 'trueoaa', 'sig'], inplace=True)

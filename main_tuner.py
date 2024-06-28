@@ -4,9 +4,9 @@ import numpy as np
 import os
 
 # df = create_file.relevant_df(apply_presel=False, select_labels=[1, 2])
-df = create_file.read_folder(select_labels=[1,2])
+df = create_file.read_folder(select_labels=[1, 2])
 
-save_path = '/home/surajrai1900/neut/outputs/fq/fq_emu/'
+save_path = '/home/surajrai1900/neut_output/fq/fq_emu/'
 if not os.path.exists(save_path):
     os.makedirs(save_path)
 

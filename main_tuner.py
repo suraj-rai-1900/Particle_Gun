@@ -27,7 +27,7 @@ print(f'Scoring: {scoring}')
 print(f'Cut type: {cut_type}')
 
 tuner = cut_tuning.CutTuner(df, variables, algorithm, scoring=scoring)
-tuner.relevant_variables()
+tuner.relevant_variables(select_labels=[1, 2])
 if cut_type == 'linear':
     tuner.optimize_linear_cut()
 elif cut_type == 'quadratic':

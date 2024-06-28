@@ -197,7 +197,12 @@ def read_folder(select_labels, fpath="/home/surajrai1900/analysis_data/"):
             df_list.append(df_chunk)
 
     df = pd.concat(df_list)
-    df.drop(columns=['sig_fitqun', 'pi0fitqun', 'weight', 'trueoaa'], inplace=True)
+
+    df['true_sig'] = df['sig']
+    df['e/mu_likelihood ratio'] = df['mulikelihood'] - df['elilkelihood']
+    df['pi0/e_likelihood ratio'] = df['elikelihood'] - df['pi0likelihood']
+
+    df.drop(columns=['sig_fitqun', 'pi0fitqun', 'weight', 'trueoaa', 'sig'], inplace=True)
 
     if select_labels == [1, 2]:
         df['pe'], df['pmu'] = normalize_softmax(df, [0, 1, 3], [2])
@@ -216,4 +221,3 @@ def read_folder(select_labels, fpath="/home/surajrai1900/analysis_data/"):
         df.drop(columns=['pgamma'], inplace=True)
 
     return df
-

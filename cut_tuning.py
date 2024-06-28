@@ -337,15 +337,16 @@ class CutTuner:
         self.cut_coefficients = None
         self.vertical_cut = None
 
-    def relevant_variables(self):
+    def relevant_variables(self, select_labels=False):
         if self.cut_algorithm == 'fitqun':
-            if cuts.check_labels(self.df, [1, 2]):
+            if cuts.check_labels(self.df, [1, 2]) or (select_labels == [1, 2]):
                 self.y = ['e/mu_likelihood ratio']
                 self.relation = [True]
-            elif cuts.check_labels(self.df, [1, 3]):
+            elif cuts.check_labels(self.df, [1, 3]) or (select_labels == [1, 3]):
                 self.y = ['pi0/e_likelihood ratio']
                 self.relation = [False]
-            elif cuts.check_labels(self.df, [1, 2, 3]) or cuts.check_labels(self.df, [0, 1, 2, 3]):
+            elif cuts.check_labels(self.df, [1, 2, 3]) or cuts.check_labels(self.df, [0, 1, 2, 3]) \
+                    or (select_labels == [1, 2, 3]) or (select_labels == [0, 1, 2, 3]):
                 if 'e/mu_likelihood ratio' in self.variables and 'pi0/e_likelihood ratio' in self.variables:
                     self.y = ['e/mu_likelihood ratio', 'pi0/e_likelihood ratio']
                     self.relation = [True, False]
@@ -357,7 +358,7 @@ class CutTuner:
                     self.relation = [False]
 
         elif self.cut_algorithm == 'softmax':
-            if cuts.check_labels(self.df, [1, 2]):
+            if cuts.check_labels(self.df, [1, 2]) or (select_labels == [1, 2]):
                 if 'pe' in self.variables and 'pmu' in self.variables:
                     self.y = ['pe', 'pmu']
                     self.relation = [True, False]
@@ -368,7 +369,7 @@ class CutTuner:
                     self.y = ['pmu']
                     self.relation = [False]
 
-            elif cuts.check_labels(self.df, [1, 3]):
+            elif cuts.check_labels(self.df, [1, 3]) or (select_labels == [1, 3]):
                 if 'pe' in self.variables and 'ppi0' in self.variables:
                     self.y = ['pe', 'ppi0']
                     self.relation = [True, False]
@@ -378,10 +379,10 @@ class CutTuner:
                 elif 'pe' not in self.variables and 'ppi0' in self.variables:
                     self.y = ['ppi0']
                     self.relation = [False]
-            elif cuts.check_labels(self.df, [1, 2, 3]):
+            elif cuts.check_labels(self.df, [1, 2, 3]) or (select_labels == [1, 2, 3]):
                 self.y = ['pe', 'pmu', 'ppi0']
                 self.relation = [True, False, False]
-            elif cuts.check_labels(self.df, [1, 2, 3]):
+            elif cuts.check_labels(self.df, [1, 2, 3]) or (select_labels == [1, 2, 3]):
                 self.y = ['pe', 'pmu', 'ppi0', 'pgamma']
                 self.relation = [True, False, False, False]
 
@@ -493,7 +494,7 @@ class CutTuner:
                         #     cut = self.vertical_cut
                     elif cut_type == 'quadratic':
                         if self.relation[i]:
-                            cut = (df[self.y[i]] > 
+                            cut = (df[self.y[i]] >
                                    self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][0] * df[self.X[j]] *
                                    df[self.X[j]]
                                    + self.cut_coefficients[f'{self.y[i]} Vs {self.X[j]}'][1] * df[self.X[j]]
@@ -534,7 +535,7 @@ class CutTuner:
                     metric[f'{self.y[i]} Vs {self.X[j]}'] = f1(self.df['true_sig'], cut)[2]
                 elif self.scoring == 'signal_significance':
                     metric[f'{self.y[i]} Vs {self.X[j]}'] = signal_significance(self.df['true_sig'], cut)
-                    
+
                 df = df[cut]
 
         return metric

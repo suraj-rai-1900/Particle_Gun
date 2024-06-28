@@ -2,16 +2,19 @@ import numpy as np
 
 
 def check_labels(df, labels):
-    label_map = [0, 1, 2, 3]
-    label_count = []
-    for i in range(4):
-        label_count.append(np.sum(df['h5_labels'] == i))
-    label_array = []
-    for i in range(len(label_count)):
-        if label_count[i] > 0:
-            label_array.append(label_map[i])
-    if label_array == labels:
-        return True
+    if 'h5_labels' in df.columns:
+        label_map = [0, 1, 2, 3]
+        label_count = []
+        for i in range(4):
+            label_count.append(np.sum(df['h5_labels'] == i))
+        label_array = []
+        for i in range(len(label_count)):
+            if label_count[i] > 0:
+                label_array.append(label_map[i])
+        if label_array == labels:
+            return True
+        else:
+            return False
     else:
         return False
 

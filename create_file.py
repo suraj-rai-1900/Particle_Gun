@@ -1,5 +1,7 @@
 import numpy as np
 import pandas as pd
+import uproot
+
 import cuts
 import h5py
 from watchmal_dependencies import math, fq_output
@@ -72,16 +74,17 @@ def create_true_df(file='/home/pdeperio/machine_learning/data/'
     df['azimuth'] = np.array(h5_file['angles'])[test_idxs][:, 1] * 180/np.pi
     df['event_index'] = np.array(test_idxs)
 
+    positions = np.array(h5_file['positions'])[test_idxs].squeeze()
+    df['x'] = positions[:, 0]
+    df['y'] = positions[:, 1]
+    df['z'] = positions[:, 2]
     return df
 
 
-def create_softmax(file_path='/home/surajrai1900/WatChMaL/outputs/2023-09-19/03-59-17/outputs/'):
+def create_softmax(file_path='/home/surajrai1900/WatChMaL/outputs/2024-04-11/04-35-07/outputs/'):
     softmax = file_path + 'softmax.npy'
-    predictions = file_path + 'predictions.npy'
 
     df = pd.DataFrame()
-    df['softmax_predictions'] = np.load(predictions)
-
     data_softmax = np.load(softmax)
     df['pgamma'] = data_softmax[:, 0]
     df['pe'] = data_softmax[:, 1]
@@ -135,7 +138,7 @@ def relevant_df(true_variables=None, reco_variables=None, softmax_variables=None
 
     if true_variables is None:
         true_variables = ['h5_labels', 'h5_momentum', 'h5_towall', 'h5_dwall', 'cos_zenith', 'azimuth', 'event_index',
-                          'h5_vetos', 'h5_nhits']
+                          'h5_vetos', 'h5_nhits', 'x', 'y', 'z']
 
     if not isinstance(true_sig, (list, np.ndarray)):
         true_sig = [true_sig]
@@ -178,3 +181,39 @@ def relevant_df(true_variables=None, reco_variables=None, softmax_variables=None
         df['softmax_discriminator'] = cuts.softmax_discriminator(df)
 
     return df
+
+
+def read_folder(select_labels, fpath="/home/surajrai1900/analysis_data/"):
+    files_to_exclude = np.load('/home/surajrai1900/files_to_exclude.npy')
+    df_list = []
+    for i in range(1, 10000):
+        if i not in files_to_exclude:
+            file = fpath + f"combined_data_{i:05d}.root"
+            root_file = uproot.open(file)
+            dict_vals = {}
+            for key in root_file["data"].keys():
+                dict_vals[key] = np.array(root_file["data"][key])[0]
+            df_chunk = pd.DataFrame(dict_vals)
+            df_list.append(df_chunk)
+
+    df = pd.concat(df_list)
+    df.drop(columns=['sig_fitqun', 'pi0fitqun', 'weight', 'trueoaa'], inplace=True)
+
+    if select_labels == [1, 2]:
+        df['pe'], df['pmu'] = normalize_softmax(df, [0, 1, 3], [2])
+        df.drop(columns=['pgamma', 'ppi0'], inplace=True)
+
+    elif select_labels == [1, 3]:
+        df['pe'], df['ppi0'] = normalize_softmax(df, [0, 1], [3])
+        df.drop(columns=['pmu', 'pgamma'], inplace=True)
+
+    elif select_labels == [1, 4]:
+        df['pe'], df['pgamma'] = normalize_softmax(df, [1], [0])
+        df.drop(columns=['pmu', 'ppi0'], inplace=True)
+
+    elif select_labels == [1, 2, 3]:
+        df['pe'] = df['pe'] + df['pgamma']
+        df.drop(columns=['pgamma'], inplace=True)
+
+    return df
+

@@ -3,9 +3,10 @@ import cut_tuning
 import numpy as np
 import os
 
-df = create_file.relevant_df(apply_presel=False, select_labels=[1, 2])
+# df = create_file.relevant_df(apply_presel=False, select_labels=[1, 2])
+df = create_file.read_folder(select_labels=[1,2])
 
-save_path = '/home/surajrai1900/outputs/fq_cut/e_muf1/'
+save_path = '/home/surajrai1900/neut/outputs/fq/fq_emu/'
 if not os.path.exists(save_path):
     os.makedirs(save_path)
 
@@ -14,7 +15,7 @@ if not os.path.exists(save_path):
 
 # Scoring : f1, signal_significance, None
 
-variables = ['e/mu_likelihood ratio', 'reco_electron_mom']
+variables = ['e/mu_likelihood ratio', 'mom']
 algorithm = 'fitqun'
 scoring = 'f1'
 cut_type = 'linear'

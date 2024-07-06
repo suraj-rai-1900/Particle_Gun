@@ -118,6 +118,7 @@ def create_fq_df(file_path='/home/pdeperio/machine_learning/data/IWCD_mPMT_Short
     df['pi0/e_likelihood ratio'] = df['e_likelihood'] - df['pi0_likelihood']
     df['flag_e'] = np.array(fq.electron_flag)[offsets]
     df['flag_mu'] = np.array(fq.muon_flag)[offsets]
+    df['flag_pi0'] = np.array(fq.pi0_flag)[offsets]
 
     return df
 
@@ -134,7 +135,7 @@ def relevant_df(true_variables=None, reco_variables=None, softmax_variables=None
     if reco_variables is None:
         reco_variables = ['e/mu_likelihood ratio', 'pi0/e_likelihood ratio', 'e_likelihood', 'mu_likelihood',
                           'pi0_likelihood', 'reco_electron_mom', 'reco_electron_dwall', 'reco_electron_towall',
-                          'pi0_mass', 'flag_e', 'flag_mu']
+                          'pi0_mass', 'flag_e', 'flag_mu', 'flag_pi0']
 
     if true_variables is None:
         true_variables = ['h5_labels', 'h5_momentum', 'h5_towall', 'h5_dwall', 'cos_zenith', 'azimuth', 'event_index',
